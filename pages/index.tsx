@@ -1,6 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Container, Row, Card, Button } from 'react-bootstrap'
+import styled from 'styled-components'
+
+const StyledCard = styled(Card)`
+  border-radius: 34px;
+`
 
 const Home: NextPage = () => {
   return (
@@ -18,7 +23,7 @@ const Home: NextPage = () => {
         </p>
         <Container>
           <Row className="justify-content-md-between">
-            <Card className="sml-card">
+            <StyledCard className="sml-card">
               <Card.Body>
                 <Card.Title>Documentation</Card.Title>
                 <Card.Text>
@@ -28,7 +33,7 @@ const Home: NextPage = () => {
                   More &rarr;
                 </Button>
               </Card.Body>
-            </Card>
+            </StyledCard>
             <Card className="sml-card">
               <Card.Body>
                 <Card.Title>Learn</Card.Title>
