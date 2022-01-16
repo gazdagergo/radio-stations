@@ -4,6 +4,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     background: #21212A;
     --border-radius: 20px;
+    font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
   }
 
   .row {
