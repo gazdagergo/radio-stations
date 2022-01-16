@@ -11,6 +11,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .card {
-    border-color: black;
+    border-color: #222;
   }
 `;
