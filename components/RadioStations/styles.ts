@@ -1,6 +1,8 @@
 import { Card, Accordion } from 'react-bootstrap'
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import Icons from '../Icons'
+import DashCircle from '../Icons/DashCircle'
+import PlusCircle from '../Icons/PlusCircle'
 
 const { Power, ChevronLeft } = Icons
 
@@ -11,6 +13,12 @@ export const StationListWrap = styled(Card)`
 
 export const StationListBody = styled(Card.Body)`
   background: ${({ theme }) => theme.colors.secondaryBackground};
+  @media(max-width: 400px){
+    &.card-body {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
 `
 
 export const StationLisHead = styled(Card.Header)`
@@ -98,6 +106,8 @@ export const StationListItem = styled(Accordion.Item)`
 
 export const StationName = styled(Accordion.Header)`
   .accordion-button {
+    display: flex;
+    justify-content: space-between;
     font-size: 1.4rem;
     background: none;
     color: ${({ theme }) => theme.colors.negativeSecondaryText};
@@ -105,5 +115,54 @@ export const StationName = styled(Accordion.Header)`
 `
 
 export const StationDetails = styled(Accordion.Body)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
 
+export const RadioTeaser = styled.div`
+  border: 2px solid ${({ theme }) => theme.colors.negativeSecondaryText};
+  display: inline-flex;
+  border-radius: 50%;
+  overflow: hidden;
+`
+
+const beat = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+
+
+const VolumeControlMixin = css`
+  svg circle {
+    fill: ${({ theme }) => theme.colors.primary};
+    opacity: 0;
+  }
+
+  &:focus svg circle {
+    animation: ${beat} .1s ease-in-out backwards;
+  }
+
+  &:active svg circle {
+    animation: none;
+  }
+
+  svg path {
+    stroke: ${({ theme }) => theme.colors.negativeSecondaryText};
+    fill: ${({ theme }) => theme.colors.negativeSecondaryText};
+    stroke-width: 0.15px;
+  }
+`
+
+export const Up = styled(PlusCircle).attrs({ size: 38 })``
+export const Down = styled(DashCircle).attrs({ size: 38 })``
+
+export const VolumeControl = styled.button`
+  border: none;
+  background: transparent;
+  ${VolumeControlMixin}
 `

@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import { FC, useState } from 'react'
 import { Container, Row } from 'react-bootstrap'
 import { RadioWithId } from '../../types/Radio'
@@ -12,7 +13,11 @@ import {
   StationListItem,
   StationListStatusFooter,
   StationListWrap,
-  StationName
+  StationName,
+  RadioTeaser,
+  VolumeControl,
+  Up,
+  Down,
 } from './styles'
 
 
@@ -22,11 +27,18 @@ interface Props {
   }
 }
 
+interface AccordionButton extends Element {
+  type: string,
+}
+
 const RadioStations: FC<Props> = ({ radiosObject }) => {
   const [activeStationKey, setActiveStationKey] = useState('')
 
-  const handleListItemClick = (key: string) => {
-    setActiveStationKey(prevKey => key === prevKey ? '' : key)
+  
+  const handleListItemClick = ({ target }:{ target: AccordionButton }, key: string) => {
+    if (['STRONG', 'SPAN'].includes(target.tagName) || target.type === 'button'){
+      setActiveStationKey(prevKey => key === prevKey ? '' : key)
+    }
   }
 
   return (
@@ -50,10 +62,23 @@ const RadioStations: FC<Props> = ({ radiosObject }) => {
                   <StationListItem
                     key={id}
                     eventKey={id}
-                    onClick={() => handleListItemClick(id)}
+                    onClick={({ target }:{ target: AccordionButton }) => handleListItemClick({ target }, id)}
                   >
                     <StationDetails>
-                      Putin FM Details
+                      <VolumeControl>
+                        <Down />
+                      </VolumeControl>
+                      <RadioTeaser>
+                        <Image
+                          alt="radio station image"
+                          src={image}
+                          width={120}
+                          height={120}
+                        />
+                      </RadioTeaser>
+                      <VolumeControl>
+                        <Up />
+                      </VolumeControl>
                     </StationDetails>
                     <StationName>
                       <span>{name}</span>

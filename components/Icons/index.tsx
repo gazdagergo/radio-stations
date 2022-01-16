@@ -1,7 +1,13 @@
 import ChevronLeft from './ChevronLeft'
 import Power from './Power'
+import PlusCircle from './PlusCircle'
+import DashCircle from './DashCircle'
 
-export default {
+const exports = {
   ChevronLeft,
   Power,
+  PlusCircle,
+  DashCircle,
 }
+
+export default exports

@@ -14,4 +14,8 @@ export const GlobalStyle = createGlobalStyle`
   .card {
     border-color: #222;
   }
+
+  .container {
+    padding: 2px;
+  }
 `;

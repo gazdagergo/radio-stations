@@ -8,7 +8,6 @@ const Power:FC<{size: number}> = ({
     width={size}
     height={size}
     fill="currentColor"
-    className="bi bi-power"
     viewBox="0 0 16 16"
     {...rest}
     >
