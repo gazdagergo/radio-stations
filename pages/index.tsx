@@ -1,10 +1,57 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Container, Row, Card, Button } from 'react-bootstrap'
+import { Container, Row, Card, Button, Accordion } from 'react-bootstrap'
 import styled from 'styled-components'
 
-const StyledCard = styled(Card)`
-  border-radius: 34px;
+const StationListWrap = styled(Card)`
+  border-radius: var(--border-radius);
+`
+
+const StationListBody = styled(Card.Body)`
+  background: ${({ theme }) => theme.colors.secondaryBackground};
+`
+
+const StationLisHead = styled(Card.Header)`
+  height: 80px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: .02rem;
+  ${({ theme }) => `
+    background: ${theme.colors.primary};
+    color: ${theme.colors.negativeText};
+  `}
+
+  &:first-child {
+    border-radius: calc(var(--border-radius) - 1px) calc(var(--border-radius) - 1px) 0 0;
+  }
+`
+
+const StationList = styled(Accordion)`
+  border-radius: 0;
+` 
+
+const StationListItem = styled(Accordion.Item)`
+  border-width: 0 0 1px 0;
+  border-color: ${({ theme }) => theme.colors.negativeSecondaryText};
+  background: transparent;
+  &.accordion-item:last-of-type {
+    border-radius: 0;
+  }
+`
+
+const StationName = styled(Accordion.Header)`
+  .accordion-button {
+    background: none;
+    color: ${({ theme }) => theme.colors.negativeSecondaryText};
+  }
+`
+
+const StationDetails = styled(Accordion.Body)`
+
 `
 
 const Home: NextPage = () => {
@@ -15,81 +62,33 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon-32x32.png" />
       </Head>
       <Container>
-        <h1>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-        <p>
-          Get started by editing <code>pages/index.js</code>
-        </p>
         <Container>
           <Row className="justify-content-md-between">
-            <StyledCard className="sml-card">
-              <Card.Body>
-                <Card.Title>Documentation</Card.Title>
-                <Card.Text>
-                  Find in-depth information about Next.js features and API.
-                </Card.Text>
-                <Button variant="primary" href="https://nextjs.org/docs">
-                  More &rarr;
-                </Button>
-              </Card.Body>
-            </StyledCard>
-            <Card className="sml-card">
-              <Card.Body>
-                <Card.Title>Learn</Card.Title>
-                <Card.Text>
-                  Learn about Next.js in an interactive course with quizzes!
-                </Card.Text>
-                <Button variant="primary" href="https://nextjs.org/learn">
-                  More &rarr;
-                </Button>
-              </Card.Body>
-            </Card>
-          </Row>
-          <Row className="justify-content-md-between">
-            <Card className="sml-card">
-              <Card.Body>
-                <Card.Title>Examples</Card.Title>
-                <Card.Text>
-                  Discover and deploy boilerplate example Next.js projects.
-                </Card.Text>
-                <Button
-                  variant="primary"
-                  href="https://github.com/vercel/next.js/tree/canary/examples"
-                >
-                  More &rarr;
-                </Button>
-              </Card.Body>
-            </Card>
-            <Card className="sml-card">
-              <Card.Body>
-                <Card.Title>Deploy</Card.Title>
-                <Card.Text>
-                  Instantly deploy your Next.js site to a public URL with
-                  Vercel.
-                </Card.Text>
-                <Button
-                  variant="primary"
-                  href="https://vercel.com/new?utm_source=github&utm_medium=example&utm_campaign=next-example"
-                >
-                  More &rarr;
-                </Button>
-              </Card.Body>
-            </Card>
+            <StationListWrap>
+              <StationLisHead>Stations</StationLisHead>
+              <StationListBody>
+                <StationList defaultActiveKey="0">
+                  <StationListItem eventKey="0">
+                    <StationDetails>
+                      Putin FM Details
+                    </StationDetails>
+                    <StationName>Putin FM</StationName>
+                  </StationListItem>
+    
+                  <StationListItem eventKey="1">
+                    <StationDetails>
+                      Dribble FM Details
+                    </StationDetails>
+                    <StationName>Dribble FM</StationName>
+                  </StationListItem>
+    
+                </StationList>
+            </StationListBody>
+          </StationListWrap>
+
           </Row>
         </Container>
       </Container>
-
-      <footer className="cntr-footer">
-        <a
-          href="https://vercel.com?filter=next.js&utm_source=github&utm_medium=example&utm_campaign=next-example"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="sml-logo" />
-        </a>
-      </footer>
     </Container>
   )
 }
