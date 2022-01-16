@@ -1,11 +1,25 @@
-import type { NextPage } from 'next'
+import type { NextPage, InferGetStaticPropsType } from 'next'
+import { nanoid } from 'nanoid/non-secure'
 import Head from 'next/head'
+import { useState } from 'react'
 import { Container, Row, Card, Accordion } from 'react-bootstrap'
 import styled from 'styled-components'
 import Icons from '../components/Icons'
 
-const { Power, ChevronLeft } = Icons
+type Radio = {
+  id?: string
+  name: string
+  frequency: number
+  image: string
+}
 
+interface Props {
+  radiosObject: {
+    [key:number]: Radio
+  }
+}
+
+const { Power, ChevronLeft } = Icons
 
 const StationListWrap = styled(Card)`
   border-radius: var(--border-radius);
@@ -38,9 +52,29 @@ const StationLisHead = styled(Card.Header)`
 const StationListStatusFooter = styled(Card.Footer)`
   height: 75px;
   background: ${({ theme }) => theme.colors.ternaryBackgrouond};
+  display: flex;
+  align-items:center;
+  justify-content: flex-start;
+  padding-top: 12px;
+  flex-direction: column;
+
   &:last-child {
     border-radius: 0 0 calc(var(--border-radius) - 1px) calc(var(--border-radius) - 1px);
   }
+
+  h2 {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: .6rem;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.primary};
+  }
+  
+  p {
+    font-size: 1.4rem;
+    margin: 0;
+    color: ${({ theme }) => theme.colors.negativeSecondaryText};
+  }  
 `
 
 const BackButton = styled(ChevronLeft).attrs({ size: 25 })`
@@ -62,7 +96,7 @@ const PowerButton = styled(Power).attrs({ size: 25 })`
 
 const StationList = styled(Accordion)`
   border-radius: 0;
-` 
+`
 
 const StationListItem = styled(Accordion.Item)`
   border-width: 0 0 1px 0;
@@ -81,6 +115,7 @@ const StationListItem = styled(Accordion.Item)`
 
 const StationName = styled(Accordion.Header)`
   .accordion-button {
+    font-size: 1.4rem;
     background: none;
     color: ${({ theme }) => theme.colors.negativeSecondaryText};
   }
@@ -91,7 +126,13 @@ const StationDetails = styled(Accordion.Body)`
 `
 
 
-const Home: NextPage = () => {
+const Home: NextPage<Props> = ({ radiosObject }) => {
+  const [activeStationKey, setActiveStationKey] = useState('')
+
+  const handleListItemClick = (key: string) => {
+    setActiveStationKey(prevKey => key === prevKey ? '' : key)
+  }
+
   return (
     <Container className="md-container">
       <Head>
@@ -108,28 +149,28 @@ const Home: NextPage = () => {
                 <PowerButton />
               </StationLisHead>
               <StationListBody>
-                <StationList defaultActiveKey="0">
-                  <StationListItem eventKey="0">
+                <StationList activeKey={activeStationKey}>
+                {Object.values(radiosObject).map(({ id, name, frequency, image }) => (
+                  <StationListItem
+                    key={id}
+                    eventKey={id}
+                    onClick={() => handleListItemClick(id)}
+                  >
                     <StationDetails>
                       Putin FM Details
                     </StationDetails>
-                    <StationName>Putin FM</StationName>
+                    <StationName>{name}</StationName>
                   </StationListItem>
-    
-                  <StationListItem eventKey="1">
-                    <StationDetails>
-                      Dribble FM Details
-                    </StationDetails>
-                    <StationName>Dribble FM</StationName>
-                  </StationListItem>
-    
+                ))}                  
                 </StationList>
-            </StationListBody>
-            <StationListStatusFooter>
-              Playing
-            </StationListStatusFooter>
-          </StationListWrap>
-
+              </StationListBody>
+              <StationListStatusFooter>
+                <h2>Currently playing</h2>
+                <p>
+                  {radiosObject[activeStationKey]?.name}
+                </p>
+              </StationListStatusFooter>
+            </StationListWrap>
           </Row>
         </Container>
       </Container>
@@ -138,3 +179,26 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+export const getStaticProps = async () => {
+  const res = await fetch('https://jobapi.teclead-ventures.de/recruiting/radios')
+  const { radios }: { radios: Radio[] } = await res.json()
+
+  const radiosObject = radios.reduce((acc, radio) => {
+    const id = nanoid()
+
+    return {
+      ...acc,
+      [id]: {
+        id,
+        ...radio
+      }
+    }
+}, {})
+
+  return {
+    props: {
+      radiosObject,
+    },
+  }
+}
